@@ -1,222 +1,185 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
-	<head>
-		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<title></title>
-		<link rel="stylesheet" href="">
-		<script type="text/javascript" src="jquery-1.11.1.js"></script>
-		<style type="text/css" media="screen">
-			* {
-				margin: 0;
-				padding: 0;
-			}
-			
-			body {
-				padding-top: 20px;
-			}
-			
-			h3,
-			h2 {
-				text-align: center;
-			}
-			
-			.guanShu {
-				color: red;
-			}
-			
-			.guoguan {
-				text-align: center;
-				font-size: 38px;
-				color: red;
-				font-weight: 600;
-				height: 43px;
-			}
-			
-			.pass {
-				display: none;
-			}
-			
-			ul {
-				list-style: none;
-				margin: 30px auto 0;
-				overflow: hidden;
-			}
-			
-			.end {
-				width: 324px;
-				height: 300px;
-				margin: 30px auto 0;
-				background: #60DFFF;
-				color: white;
-				padding-top: 24px;
-				display: none;
-			}
-			
-			.end>#playAgain {
-				width: 50%;
-				line-height: 50px;
-				cursor: pointer;
-				text-align: center;
-				background: #E4696B;
-				margin: 50px auto;
-			}
-			
-			li {
-				float: left;
-				border-right: 1px solid white;
-				border-top: 1px solid white;
-				background: #ccc;
-				cursor: pointer;
-			}
-			
-			#start {
-				font-size: 20px;
-				background: #60DFFF;
-				width: 100px;
-				line-height: 50px;
-				margin: 10px auto;
-				color: white;
-				text-align: center;
-				cursor: pointer;
-			}
-			
-			#moban {
-				width: 100%;
-				height: 100%;
-				position: absolute;
-				top: 0;
-				display: none;
-			}
-		</style>
-	</head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Test and train your brain with Memory Test - an engaging game to enhance your memory and cognitive skills. Challenge yourself to remember patterns and score high!">
+    <meta name="keywords" content="Memory Test, memory game, brain training, memory training, cognitive skills">
+    <meta name="author" content="Your Name">
+    <title>Memory Test - Train Your Brain with Fun</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-	<body>
-		<h2>只有2秒钟时间记住黄色格子出现的地方！然后找出它们！第<span class="guanShu">1</span>关</h2>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
 
-		<div class="end">
-			<h2>GAME OVER !</h2>
-			<div id="playAgain" onclick="playAgain()">再玩一次</div>
-		</div>
-		<ul id="box">
+        header {
+            background: #1e90ff;
+            color: #fff;
+            padding: 20px 10%;
+            text-align: center;
+        }
 
-		</ul>
-		<div class="guoguan">
-			<span class="pass">过关！</span>
-		</div>
-		<div id="start">开始游戏</div>
-		<div id="moban"></div>
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
 
-		<script type="text/javascript">
-			var num = 4; //黄色方块的数量（随机数的数量）
-			var guanshu = 1; //通关数
-			var times = 0; //点击li的次数
-			var width = 101; //每个li的宽高
-			var ary = suiji(num);
-			$(function() {
-				init();
-				//点击开始游戏
-				$('#start').click(function() {
-					start();
-					$(this).hide();
-				});
-				//点击方块li
-				$(document).on('click', 'li', function() {
-					if(ary.indexOf($(this).index()) != -1) {
-						times++;
-						$(this).css('background', 'yellow');
-						if(times == num) { //过关
-							$('.pass').fadeIn()
-							setTimeout(function() {
-								$('.pass').fadeOut()
-								init();
-								ary = suiji(num);
-								start();
-								guanshu++
-								$('.guanShu').text(guanshu);
-							}, 1000)
-						} else if(times == num * 2) { //过关 然后升级关卡
-							times = 0;
-							$('.pass').fadeIn()
-							setTimeout(function() {
-								$('.pass').fadeOut();
-								num++;
-								width -= 10;
-								init();
-								ary = suiji(num);
-								start();
-								guanshu++
-								$('.guanShu').text(guanshu);
+        header p {
+            font-size: 1rem;
+            margin-bottom: 0;
+        }
 
-							}, 2000)
-						}
-					} else {
-						//游戏结束
-						$(this).css('background', 'red');
-						setTimeout(function() {
-							$('ul').hide();
-							$('.end').show()
-						}, 1000)
-					};
-				})
-			})
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px 10%;
+        }
 
-			//生成ul里面的li dom
-			function init() {
-				$('#box').empty();
+        section {
+            margin-bottom: 40px;
+        }
 
-				$('#box').css('width', num * width + 'px')
-				for(var i = 0; i < num * num; i++) {
-					$('#box').append('<li></li>');
-				}
-				$('li').css({
-					'width': width - 1 + 'px',
-					'height': width - 1 + 'px'
-				})
-			}
+        section h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #1e90ff;
+        }
 
-			//生成num个随机数
-			function suiji(num) {
-				var arr = [];
-				while(arr.length < num) {
-					var item = Math.floor(Math.random() * (num * num - 1));
-					if(arr.indexOf(item) == -1) {
-						arr.push(item);
-					}
-				}
-				console.log(arr);
-				return arr;
-			}
+        section p {
+            font-size: 1rem;
+            margin-bottom: 20px;
+        }
 
-			//生成黄色方块 显示2秒后变回灰色
-			function start() {
-				$('#moban').show();
-				for(var i = 0; i < num; i++) {
-					$('li').eq(ary[i]).css('background', 'yellow')
-				}
-				setTimeout(function() {
-					for(var i = 0; i < num; i++) {
-						$('li').eq(ary[i]).css('background', '#ccc')
-					}
-					$('#moban').hide();
-				}, 2000)
-			}
+        .rules ul {
+            list-style-type: disc;
+            padding-left: 20px;
+        }
 
-			//再玩一次
-			function playAgain() {
-				$('.end').hide();
-				width = 101;
-				num = 4;
-				guanshu = 1;
-				$('.guanShu').text(guanshu);
-				times = 0;
-				ary = suiji(num);
-				init();
-				$('ul').show();
-				start()
-			}
-		</script>
-	</body>
+        .rules ul li {
+            margin-bottom: 10px;
+        }
+
+        .gameplay {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .gameplay img {
+            max-width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .cta {
+            text-align: center;
+            padding: 40px 10%;
+            background: linear-gradient(to right, #00c6ff, #0072ff);
+            color: #fff;
+        }
+
+        .cta h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .cta button {
+            font-size: 1rem;
+            padding: 15px 30px;
+            background: #ff6347;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .cta button:hover {
+            background: #ff4500;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: #333;
+            color: #fff;
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: #4facfe;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header Section -->
+    <header>
+        <h1>Memory Test - Train Your Brain</h1>
+        <p>Challenge your memory and improve your cognitive skills with our interactive Memory Test game.</p>
+    </header>
+
+    <div class="container">
+        <!-- About the Game -->
+        <section>
+            <h2>About the Memory Test Game</h2>
+            <p>The Memory Test is a fun and engaging game designed to enhance your memory and cognitive abilities. 
+               Test how well you can remember patterns and improve your focus with every level!</p>
+        </section>
+
+        <!-- Rules of the Game -->
+        <section class="rules">
+            <h2>How to Play</h2>
+            <ul>
+                <li>At the start of each level, a grid will display yellow tiles for 2 seconds.</li>
+                <li>Your task is to remember the positions of the yellow tiles.</li>
+                <li>Click on the tiles that were yellow to proceed to the next level.</li>
+                <li>Each level gets progressively harder with more tiles to remember.</li>
+                <li>Choose wrong tiles, and the game ends!</li>
+            </ul>
+        </section>
+
+        <!-- Gameplay Section -->
+        <section class="gameplay">
+            <div>
+                <h2>Gameplay and Scoring</h2>
+                <p>In the Memory Test, your score increases as you pass each level. The faster you complete a level, 
+                   the higher your score! Stay focused and challenge your memory with increasing difficulty.</p>
+            </div>
+            <img src="https://via.placeholder.com/600x400" alt="Memory Test Gameplay Screenshot">
+        </section>
+
+        <!-- Call to Action -->
+        <section class="cta">
+            <h2>Ready to Test Your Memory?</h2>
+            <button onclick="location.href='#'">Play Now</button>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2024 Memory Test Game. Created for cognitive improvement. <a href="#">Learn More</a>.</p>
+    </footer>
+</body>
 
 </html>
